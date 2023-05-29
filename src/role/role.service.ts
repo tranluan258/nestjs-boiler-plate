@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { In, Not, Repository } from 'typeorm';
+import { FindManyOptions, In, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
 
@@ -115,7 +115,13 @@ export class RoleService {
       role.policies = listPolicy;
     }
 
+    role.name = updateRoleDto.name;
+
     return this.roleRepository.save(role);
+  }
+
+  findAllOtherService(query: FindManyOptions<Role>) {
+    return this.roleRepository.find(query);
   }
 
   remove(id: string) {

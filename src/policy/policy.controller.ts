@@ -35,12 +35,21 @@ export class PolicyController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePolicyDto: UpdatePolicyDto) {
-    return this.policyService.update(id, updatePolicyDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updatePolicyDto: UpdatePolicyDto,
+  ) {
+    await this.policyService.update(id, updatePolicyDto);
+    return {
+      message: 'Update policy successfully',
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.policyService.remove(id);
+  async remove(@Param('id') id: string) {
+    await this.policyService.remove(id);
+    return {
+      message: 'Policy deleted successfully',
+    };
   }
 }

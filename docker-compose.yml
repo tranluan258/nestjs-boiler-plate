@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  api:
+    image: node:18.16-alpine3.16
+    command: sh -c "npm install && npm run typeorm:run-migrations && npm run start:local"
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      - ./package.json:/app/package.json
+    env_file:
+      - ./.docker.env
+    depends_on:
+      - db
+    networks:
+      - nestjs-boilerplate-network
+  db:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: boilerplate
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    networks:
+      - nestjs-boilerplate-network
+networks:
+  nestjs-boilerplate-network:
+    driver: bridge

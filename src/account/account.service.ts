@@ -1,9 +1,11 @@
+import { RoleService } from './../role/role.service';
+import { BaseQueryParameter } from './../shared/base-query-parameter';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Account } from './entities/account.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -11,6 +13,7 @@ export class AccountService {
   constructor(
     @InjectRepository(Account)
     private accountRepository: Repository<Account>,
+    private roleService: RoleService,
   ) {}
   async create(createAccountDto: CreateAccountDto) {
     const isExistingAccount = await this.accountRepository.findOne({
@@ -23,37 +26,100 @@ export class AccountService {
       throw new BadRequestException('Account already exists');
 
     const account = this.accountRepository.create(createAccountDto);
+    if (createAccountDto.roleId.length > 0) {
+      const roles = await this.roleService.findAllOtherService({
+        where: {
+          id: In(createAccountDto.roleId),
+        },
+      });
+      account.roles = roles;
+    }
+
     const hashPassword = bcrypt.hashSync(account.password, 10);
     account.password = hashPassword;
     return this.accountRepository.save(account);
   }
 
-  findAll() {
-    return this.accountRepository.find({
+  async findAll(query: BaseQueryParameter) {
+    const { limit, offset, order, sort } = query;
+
+    const [data, total] = await this.accountRepository.findAndCount({
       relations: {
-        roles: true,
-      },
-      order: {
         roles: {
-          name: {
-            direction: 'ASC',
-            nulls: 'LAST',
+          policies: {
+            permissions: true,
           },
         },
       },
+      select: {
+        id: true,
+        username: true,
+        password: false,
+        roles: {
+          id: true,
+          name: true,
+          policies: {
+            id: true,
+            name: true,
+            permissions: {
+              id: true,
+              resource: true,
+              action: true,
+            },
+          },
+        },
+      },
+      take: limit,
+      skip: offset,
+      order: {
+        [sort]: order,
+      },
     });
+    return {
+      data,
+      total,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} account`;
+  findOne(id: string) {
+    const account = this.accountRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!account) throw new BadRequestException('Account not found');
+    return account;
   }
 
-  update(id: number, updateAccountDto: UpdateAccountDto) {
-    return `This action updates a #${id} account`;
+  async update(id: string, updateAccountDto: UpdateAccountDto) {
+    const account = await this.accountRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        roles: true,
+      },
+    });
+
+    if (!account) throw new BadRequestException('Account not found');
+
+    if (updateAccountDto?.roleId?.length > 0) {
+      const roles = await this.roleService.findAllOtherService({
+        where: {
+          id: In(updateAccountDto.roleId),
+        },
+      });
+      account.roles = roles;
+    }
+
+    return this.accountRepository.save(account);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} account`;
+  remove(id: string) {
+    return this.accountRepository.delete({
+      id,
+    });
   }
 
   findByUsername(username: string) {

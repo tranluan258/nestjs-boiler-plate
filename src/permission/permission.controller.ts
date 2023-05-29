@@ -35,15 +35,21 @@ export class PermissionController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updatePermissionDto: UpdatePermissionDto,
   ) {
-    return this.permissionService.update(id, updatePermissionDto);
+    await this.permissionService.update(id, updatePermissionDto);
+    return {
+      message: 'Permission update successfully',
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.permissionService.remove(id);
+  async remove(@Param('id') id: string) {
+    await this.permissionService.remove(id);
+    return {
+      message: 'Permission deleted successfully',
+    };
   }
 }

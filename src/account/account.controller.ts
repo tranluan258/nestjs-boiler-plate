@@ -13,11 +13,12 @@ import {
   Delete,
   Query,
   UseGuards,
+  HttpStatus,
 } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from './../auth/guard/jwt.guard';
 
 @ApiTags('Account')
@@ -29,6 +30,19 @@ export class AccountController {
 
   @Post()
   @RequirePermission({ action: ACTION.CREATE, resource: RESOURCE.ACCOUNT })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Account created successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'Account created successfully',
+        },
+      },
+    },
+  })
   async create(@Body() createAccountDto: CreateAccountDto) {
     await this.accountService.create(createAccountDto);
     return {
@@ -38,22 +52,139 @@ export class AccountController {
 
   @Get()
   @RequirePermission({ action: ACTION.READ, resource: RESOURCE.ACCOUNT })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get all account',
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'array',
+          items: {
+            type: 'object',
+          },
+        },
+        total: {
+          type: 'number',
+          default: 0,
+        },
+      },
+    },
+  })
   findAll(@Query() query: BaseQueryParameter) {
-    return this.accountService.findAll();
+    return this.accountService.findAll(query);
   }
 
   @Get(':id')
+  @RequirePermission({ action: ACTION.READ, resource: RESOURCE.ACCOUNT })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get account by id',
+    schema: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string',
+        },
+        username: {
+          type: 'string',
+        },
+        roles: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+              },
+              name: {
+                type: 'string',
+              },
+              policies: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                    },
+                    name: {
+                      type: 'string',
+                    },
+                    permissions: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          id: {
+                            type: 'string',
+                          },
+                          resource: {
+                            type: 'string',
+                          },
+                          action: {
+                            type: 'string',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
   findOne(@Param('id') id: string) {
-    return this.accountService.findOne(+id);
+    return this.accountService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
-    return this.accountService.update(+id, updateAccountDto);
+  @RequirePermission({ action: ACTION.UPDATE, resource: RESOURCE.ACCOUNT })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Account updated successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'Account updated successfully',
+        },
+      },
+    },
+  })
+  async update(
+    @Param('id') id: string,
+    @Body() updateAccountDto: UpdateAccountDto,
+  ) {
+    await this.accountService.update(id, updateAccountDto);
+    return {
+      message: 'Account updated successfully',
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.accountService.remove(+id);
+  @RequirePermission({ action: ACTION.DELETE, resource: RESOURCE.ACCOUNT })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Account deleted successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'Account deleted successfully',
+        },
+      },
+    },
+  })
+  async remove(@Param('id') id: string) {
+    await this.accountService.remove(id);
+    return {
+      message: 'Account deleted successfully',
+    };
   }
 }

@@ -1,5 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, Matches } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Matches,
+} from 'class-validator';
 
 export class CreateAccountDto {
   @ApiProperty({
@@ -19,4 +25,11 @@ export class CreateAccountDto {
       'Password requires at least 8 characters, 1 uppercase, 1 lowercase and 1 number',
   })
   password: string;
+
+  @ApiPropertyOptional({
+    type: [Number],
+  })
+  @IsNumber({}, { each: true })
+  @IsOptional()
+  roleId: number[];
 }
