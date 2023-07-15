@@ -9,8 +9,8 @@ cache:
 deploy-development:
   stage: deploy
   environment:
-    - name: 'deploy-development'
-    - url: 'ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com'
+    name: 'deploy-development'
+    url: 'ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com'
   only:
     - develop
   before_script:
