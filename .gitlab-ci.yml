@@ -8,7 +8,7 @@ cache:
     - node_modules/
 deploy-development:
   stage: deploy
-  eviroment:
+  enviroment:
     - name: deploy-development
     - url: ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com
   only:
@@ -23,9 +23,9 @@ deploy-development:
     - npm install
     - npm run build
   script:
-    - scp -r ./dist "ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate"
-    - scp -r ./package.json "ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate"
-    - scp -r ./package-lock.json "ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate"
-    - scp -r ./ecosystem.config.js "ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate"
-    - scp -r ./.env.development "ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate"
+    - scp -r ./dist ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate
+    - scp -r ./package.json ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate
+    - scp -r ./package-lock.json ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate
+    - scp -r ./ecosystem.config.js ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate
+    - scp -r ./.env.development ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate
     - ssh ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com 'cd /home/ubuntu/code/boiler-plate && npm install && pm2 startOrRestart ecosystem.config.js --env development'
