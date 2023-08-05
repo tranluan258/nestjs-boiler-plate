@@ -1,0 +1,31 @@
+image: node:latest
+
+stages:
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+deploy-development:
+  stage: deploy
+  environment:
+    name: 'deploy-development'
+    url: 'ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com'
+  only:
+    - develop
+  before_script:
+    - eval "$(ssh-agent -s)"
+    - mkdir ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com >> ~/.ssh/known_hosts
+    - npm install
+    - npm run build
+  script:
+    - scp -r ./dist ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate
+    - scp -r ./package.json ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate
+    - scp -r ./package-lock.json ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate
+    - scp -r ./ecosystem.config.js ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate
+    - scp -r ./.env.development ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/code/boiler-plate
+    - ssh ubuntu@ec2-13-251-89-31.ap-southeast-1.compute.amazonaws.com 'cd /home/ubuntu/code/boiler-plate && npm install && pm2 startOrRestart ecosystem.config.js --env development'

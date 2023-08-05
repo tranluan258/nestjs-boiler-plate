@@ -5,7 +5,7 @@ import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Account } from './entities/account.entity';
-import { In, Repository } from 'typeorm';
+import { DeleteResult, In, Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -92,7 +92,10 @@ export class AccountService {
     return account;
   }
 
-  async update(id: string, updateAccountDto: UpdateAccountDto) {
+  async update(
+    id: string,
+    updateAccountDto: UpdateAccountDto,
+  ): Promise<Account> {
     const account = await this.accountRepository.findOne({
       where: {
         id: id,
@@ -116,7 +119,7 @@ export class AccountService {
     return this.accountRepository.save(account);
   }
 
-  remove(id: string) {
+  remove(id: string): Promise<DeleteResult> {
     return this.accountRepository.delete({
       id,
     });
