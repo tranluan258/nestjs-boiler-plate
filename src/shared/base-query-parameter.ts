@@ -17,14 +17,14 @@ export class BaseQueryParameter {
   @Type(() => Number)
   @IsNumber()
   @IsOptional()
-  limit: number;
+  limit?: number;
 
   @ApiPropertyOptional({
     description: 'Sort by',
   })
   @IsString()
   @IsOptional()
-  sort: string;
+  sort?: string;
 
   @ApiPropertyOptional({
     enum: ['ASC', 'DESC'],
@@ -32,5 +32,5 @@ export class BaseQueryParameter {
   })
   @IsString()
   @IsOptional()
-  order: string;
+  order?: string;
 }
