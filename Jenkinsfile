@@ -4,16 +4,13 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
+                sh 'npm install'
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
+                sh 'docker-compose up -d --build'
             }
         }
     }
