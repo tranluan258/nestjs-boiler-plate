@@ -13,7 +13,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                sh 'sudo docker-compose up -d --build'
+                sh 'docker build -t my-nodejs-app .'
             }
         }
     }
