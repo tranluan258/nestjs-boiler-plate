@@ -7,13 +7,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
+                sh 'docker --version'
                 sh 'npm install'
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                sh 'docker build -t my-nodejs-app .'
+                // sh 'docker-compose up -d'
             }
         }
     }
