@@ -9,7 +9,7 @@ pipeline {
                 echo 'Building..'
                 sh 'docker --version'
                 sh 'npm install'
-                sh 'dokcer-compose up -d'
+                sh 'docker-compose up -d'
             }
         }
     }
