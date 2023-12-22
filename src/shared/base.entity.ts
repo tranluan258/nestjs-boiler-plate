@@ -10,22 +10,22 @@ export class BaseEntity {
   id: string;
 
   @Column({ type: 'varchar', nullable: true })
-  createdBy: string;
+  createdBy?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  updatedBy: string;
+  updatedBy?: string;
 
   @CreateDateColumn({
     type: 'timestamp',
     default: 'now()',
     nullable: true,
   })
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',
     default: 'now()',
     nullable: true,
   })
-  updatedAt: Date;
+  updatedAt?: Date;
 }

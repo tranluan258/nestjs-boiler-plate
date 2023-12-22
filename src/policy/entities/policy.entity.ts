@@ -1,6 +1,6 @@
-import { BaseEntity } from './../../shared/base.entity';
-import { Role } from './../../role/entities/role.entity';
-import { Permission } from './../../permission/entities/permission.entity';
+import { BaseEntity } from '@/shared/base.entity';
+import { Role } from '@/role/entities/role.entity';
+import { Permission } from '@/permission/entities/permission.entity';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity()

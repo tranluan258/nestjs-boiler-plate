@@ -1,4 +1,4 @@
-import { BaseQueryParameter } from './../shared/base-query-parameter';
+import { BaseQueryParameter } from '@/shared/base-query-parameter';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';

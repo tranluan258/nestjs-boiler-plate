@@ -1,4 +1,4 @@
-import { BaseQueryParameter } from './../shared/base-query-parameter';
+import { BaseQueryParameter } from '@/shared/base-query-parameter';
 import {
   Controller,
   Get,

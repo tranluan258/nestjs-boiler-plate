@@ -7,7 +7,9 @@ import { PermissionModule } from './permission/permission.module';
 import { RoleModule } from './role/role.module';
 import { AccountModule } from './account/account.module';
 import { PolicyModule } from './policy/policy.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from '@app/auth';
+import { AccountService } from './account/account.service';
+// import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -34,7 +36,11 @@ import { AuthModule } from './auth/auth.module';
     RoleModule,
     AccountModule,
     PolicyModule,
-    AuthModule,
+    AuthModule.forRoot({
+      imports: [AccountModule],
+      inject: [AccountService],
+      useFactory: (accountService: AccountService) => accountService,
+    }),
   ],
   controllers: [],
   providers: [],

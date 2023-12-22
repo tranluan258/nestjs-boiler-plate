@@ -1,4 +1,4 @@
-import { ACTION } from './../../permission/enum/action.enum';
+import { ACTION } from '@/permission/enum/action.enum';
 import { JwtPayload } from './../interface/jwt-payload.interface';
 import {
   CanActivate,
@@ -25,7 +25,6 @@ export class PermissionGuard implements CanActivate {
     const user: JwtPayload = request.user;
 
     let hasPermission = false;
-
     user.roles.forEach((role) => {
       role.policies.forEach((policy) => {
         policy.permissions.forEach((permission) => {
