@@ -2,6 +2,7 @@ pipeline {
     agent any
     tools {
         nodejs 'my-nodejs'
+        docker 'my-docker'
     }
     stages {
         stage('Build') {
@@ -9,7 +10,7 @@ pipeline {
                 echo 'Building..'
                 sh 'docker --version'
                 sh 'npm install'
-                sh 'dokcer-compose up -d'
+                sh 'docker-compose up -d'
             }
         }
     }

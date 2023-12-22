@@ -1,7 +1,5 @@
 import { ACTION } from './../permission/enum/action.enum';
 import { RESOURCE } from './../permission/enum/resource.enum';
-import { RequirePermission } from '../auth/decorator/permission.decorator';
-import { PermissionGuard } from './../auth/guard/permission.guard';
 import { BaseQueryParameter } from './../shared/base-query-parameter';
 import {
   Controller,
@@ -19,7 +17,7 @@ import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from './../auth/guard/jwt.guard';
+import { JwtAuthGuard, PermissionGuard, RequirePermission } from '@app/auth';
 
 @ApiTags('Account')
 @ApiBearerAuth()

@@ -1,5 +1,5 @@
-import { Policy } from './../../policy/entities/policy.entity';
-import { BaseEntity } from './../../shared/base.entity';
+import { Policy } from '@/policy/entities/policy.entity';
+import { BaseEntity } from '@/shared/base.entity';
 import { Column, Entity, ManyToMany } from 'typeorm';
 
 @Entity()

@@ -4,59 +4,47 @@ import { AccountService } from './account.service';
 import { Account } from './entities/account.entity';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { UpdateResult } from 'typeorm';
 
 describe('AccountController', () => {
   let controller: AccountController;
+
+  const mockAccount: Account = {
+    id: '1',
+    username: 'test',
+    password: 'test',
+    roles: [],
+  };
+
   const mockAccountService = {
-    findAll: jest.fn().mockImplementation(async () => {
-      return {
-        data: [],
-        total: 0,
-      };
+    findAll: jest.fn().mockImplementation(
+      async (): Promise<{
+        data: Account[];
+        total: number;
+      }> => {
+        return {
+          data: [],
+          total: 0,
+        };
+      },
+    ),
+
+    findOne: jest.fn().mockImplementation(async (): Promise<Account> => {
+      return mockAccount;
     }),
 
-    findOne: jest.fn().mockImplementation(async () => {
-      return {
-        id: '1',
-        username: 'test',
-        password: 'test',
-        roles: [],
-        createdBy: '',
-        updatedBy: '',
-        createdAt: undefined,
-        updatedAt: undefined,
-      };
+    create: jest.fn().mockImplementation(async (): Promise<Account> => {
+      return mockAccount;
+    }),
+    update: jest.fn().mockImplementation(async (): Promise<Account> => {
+      return mockAccount;
     }),
 
-    create: jest.fn().mockImplementation(async () => {
-      return {
-        id: '1',
-        username: 'test',
-        password: 'test',
-        roles: [],
-        createdBy: '',
-        updatedBy: '',
-        createdAt: undefined,
-        updatedAt: undefined,
-      };
-    }),
-    update: jest.fn().mockImplementation(async () => {
-      return {
-        id: '1',
-        username: 'test',
-        password: 'test',
-        roles: [],
-        createdBy: '',
-        updatedBy: '',
-        createdAt: undefined,
-        updatedAt: undefined,
-      };
-    }),
-
-    remove: jest.fn().mockImplementation(async () => {
+    remove: jest.fn().mockImplementation(async (): Promise<UpdateResult> => {
       return {
         affected: 1,
         raw: '',
+        generatedMaps: [],
       };
     }),
   };
@@ -98,10 +86,6 @@ describe('AccountController', () => {
       username: 'test',
       password: 'test',
       roles: [],
-      createdBy: '',
-      updatedBy: '',
-      createdAt: undefined,
-      updatedAt: undefined,
     };
 
     expect(await controller.findOne(mockId)).toStrictEqual(result);
