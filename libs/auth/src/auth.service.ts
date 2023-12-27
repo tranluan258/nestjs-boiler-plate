@@ -3,11 +3,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { IAccountService } from './interface/account.service.interface';
+import { ACCOUNT_SERVICE } from './constant/constant';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject('ACCOUNT_SERVICE') private accountService: IAccountService,
+    @Inject(ACCOUNT_SERVICE) private accountService: IAccountService,
     private jwtService: JwtService,
   ) {}
 
