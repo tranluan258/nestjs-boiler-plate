@@ -2,11 +2,6 @@ import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Permission } from '../permission/entities/permission.entity';
-import { PermissionService } from '../permission/permission.service';
-import { Policy } from '../policy/entities/policy.entity';
-import { PolicyService } from '../policy/policy.service';
-import { Role } from '../role/entities/role.entity';
 import { RoleService } from '../role/role.service';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
@@ -64,10 +59,6 @@ describe('AccountService', () => {
       username: 'test',
       password: 'test',
       roles: [],
-      createdBy: '',
-      updatedBy: '',
-      createdAt: undefined,
-      updatedAt: undefined,
     };
 
     jest.spyOn(accountRepository, 'create').mockImplementation(() => account);
@@ -89,10 +80,6 @@ describe('AccountService', () => {
       username: 'test',
       password: 'test',
       roles: [],
-      createdBy: '',
-      updatedBy: '',
-      createdAt: undefined,
-      updatedAt: undefined,
     };
 
     jest

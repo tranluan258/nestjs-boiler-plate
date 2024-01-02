@@ -21,10 +21,6 @@ describe('AccountController', () => {
         username: 'test',
         password: 'test',
         roles: [],
-        createdBy: '',
-        updatedBy: '',
-        createdAt: undefined,
-        updatedAt: undefined,
       };
     }),
 
@@ -34,10 +30,6 @@ describe('AccountController', () => {
         username: 'test',
         password: 'test',
         roles: [],
-        createdBy: '',
-        updatedBy: '',
-        createdAt: undefined,
-        updatedAt: undefined,
       };
     }),
     update: jest.fn().mockImplementation(async () => {
@@ -46,10 +38,6 @@ describe('AccountController', () => {
         username: 'test',
         password: 'test',
         roles: [],
-        createdBy: '',
-        updatedBy: '',
-        createdAt: undefined,
-        updatedAt: undefined,
       };
     }),
 
@@ -98,10 +86,6 @@ describe('AccountController', () => {
       username: 'test',
       password: 'test',
       roles: [],
-      createdBy: '',
-      updatedBy: '',
-      createdAt: undefined,
-      updatedAt: undefined,
     };
 
     expect(await controller.findOne(mockId)).toStrictEqual(result);
