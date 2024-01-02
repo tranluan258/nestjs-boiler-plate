@@ -1,5 +1,5 @@
-import { Role } from './../../role/entities/role.entity';
-import { BaseEntity } from './../../shared/base.entity';
+import { Role } from '@/role/entities/role.entity';
+import { BaseEntity } from '@/shared/base.entity';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity()

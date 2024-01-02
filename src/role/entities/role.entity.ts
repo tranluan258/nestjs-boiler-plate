@@ -1,6 +1,6 @@
-import { Account } from './../../account/entities/account.entity';
-import { Policy } from './../../policy/entities/policy.entity';
-import { BaseEntity } from './../../shared/base.entity';
+import { Account } from '@/account/entities/account.entity';
+import { Policy } from '@/policy/entities/policy.entity';
+import { BaseEntity } from '@/shared/base.entity';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity()

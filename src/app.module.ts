@@ -7,7 +7,8 @@ import { PermissionModule } from './permission/permission.module';
 import { RoleModule } from './role/role.module';
 import { AccountModule } from './account/account.module';
 import { PolicyModule } from './policy/policy.module';
-import { AuthModule } from './auth/auth.module';
+import { AccountService } from './account/account.service';
+import { AuthModule } from '@app/auth';
 
 @Module({
   imports: [
@@ -34,7 +35,12 @@ import { AuthModule } from './auth/auth.module';
     RoleModule,
     AccountModule,
     PolicyModule,
-    AuthModule,
+    AuthModule.forRoot({
+      imports: [AccountModule],
+      inject: [AccountService],
+      useFactory: (accountService: AccountService) => accountService,
+      jwtSectet: process.env.JWT_SECRET,
+    }),
   ],
   controllers: [],
   providers: [],

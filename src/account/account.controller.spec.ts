@@ -4,15 +4,33 @@ import { AccountService } from './account.service';
 import { Account } from './entities/account.entity';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { UpdateResult } from 'typeorm';
 
 describe('AccountController', () => {
   let controller: AccountController;
+
+  const mockAccount: Account = {
+    id: '1',
+    username: 'test',
+    password: 'test',
+    roles: [],
+  };
+
   const mockAccountService = {
-    findAll: jest.fn().mockImplementation(async () => {
-      return {
-        data: [],
-        total: 0,
-      };
+    findAll: jest.fn().mockImplementation(
+      async (): Promise<{
+        data: Account[];
+        total: number;
+      }> => {
+        return {
+          data: [],
+          total: 0,
+        };
+      },
+    ),
+
+    findOne: jest.fn().mockImplementation(async (): Promise<Account> => {
+      return mockAccount;
     }),
 
     findOne: jest.fn().mockImplementation(async () => {
@@ -45,6 +63,7 @@ describe('AccountController', () => {
       return {
         affected: 1,
         raw: '',
+        generatedMaps: [],
       };
     }),
   };
