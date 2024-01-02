@@ -59,8 +59,6 @@ describe('AccountService', () => {
       username: 'test',
       password: 'test',
       roles: [],
-      createdBy: '',
-      updatedBy: '',
     };
 
     jest.spyOn(accountRepository, 'create').mockImplementation(() => account);
@@ -82,10 +80,6 @@ describe('AccountService', () => {
       username: 'test',
       password: 'test',
       roles: [],
-      createdBy: '',
-      updatedBy: '',
-      createdAt: undefined,
-      updatedAt: undefined,
     };
 
     jest

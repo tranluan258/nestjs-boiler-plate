@@ -33,14 +33,33 @@ describe('AccountController', () => {
       return mockAccount;
     }),
 
-    create: jest.fn().mockImplementation(async (): Promise<Account> => {
-      return mockAccount;
-    }),
-    update: jest.fn().mockImplementation(async (): Promise<Account> => {
-      return mockAccount;
+    findOne: jest.fn().mockImplementation(async () => {
+      return {
+        id: '1',
+        username: 'test',
+        password: 'test',
+        roles: [],
+      };
     }),
 
-    remove: jest.fn().mockImplementation(async (): Promise<UpdateResult> => {
+    create: jest.fn().mockImplementation(async () => {
+      return {
+        id: '1',
+        username: 'test',
+        password: 'test',
+        roles: [],
+      };
+    }),
+    update: jest.fn().mockImplementation(async () => {
+      return {
+        id: '1',
+        username: 'test',
+        password: 'test',
+        roles: [],
+      };
+    }),
+
+    remove: jest.fn().mockImplementation(async () => {
       return {
         affected: 1,
         raw: '',
