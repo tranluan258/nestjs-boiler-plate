@@ -28,43 +28,24 @@ describe('AccountController', () => {
         };
       },
     ),
-
-    findOne: jest.fn().mockImplementation(async (): Promise<Account> => {
+    findOne: jest.fn().mockImplementation(async () => {
       return mockAccount;
     }),
 
-    findOne: jest.fn().mockImplementation(async () => {
-      return {
-        id: '1',
-        username: 'test',
-        password: 'test',
-        roles: [],
-      };
-    }),
-
     create: jest.fn().mockImplementation(async () => {
-      return {
-        id: '1',
-        username: 'test',
-        password: 'test',
-        roles: [],
-      };
+      return mockAccount;
     }),
     update: jest.fn().mockImplementation(async () => {
-      return {
-        id: '1',
-        username: 'test',
-        password: 'test',
-        roles: [],
-      };
+      return mockAccount;
     }),
 
     remove: jest.fn().mockImplementation(async () => {
-      return {
+      const updated: UpdateResult = {
         affected: 1,
         raw: '',
         generatedMaps: [],
       };
+      return updated;
     }),
   };
 
