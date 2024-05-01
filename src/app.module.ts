@@ -39,7 +39,7 @@ import { AuthModule } from '@app/auth';
       imports: [AccountModule],
       inject: [AccountService],
       useFactory: (accountService: AccountService) => accountService,
-      jwtSectet: process.env.JWT_SECRET,
+      jwtSecret: process.env.JWT_SECRET,
     }),
   ],
   controllers: [],

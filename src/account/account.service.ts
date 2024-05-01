@@ -125,7 +125,11 @@ export class AccountService {
     });
   }
 
-  findByUsername(username: string) {
+  findByUsername(username: string): Promise<{
+    id: string;
+    username: string;
+    password?: string;
+  }> {
     return this.accountRepository.findOne({
       where: {
         username: username,

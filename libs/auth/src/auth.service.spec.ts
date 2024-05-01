@@ -1,13 +1,12 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { async } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ACCOUNT_SERVICE } from './constant/constant';
 import { JwtPayload } from './interface/jwt-payload.interface';
 
 describe('AuthService', () => {
   let authService: AuthService;
-  let mockAccountService = {};
+  const mockAccountService = {};
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

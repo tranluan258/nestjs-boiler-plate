@@ -129,7 +129,7 @@ describe('RoleService', () => {
       policies: [],
       accounts: [],
     };
-    const notExistedRole: Role = undefined;
+    const notExistedRole = null;
 
     roleRepository.findOne = jest
       .fn()

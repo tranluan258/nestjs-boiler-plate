@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { FindManyOptions, In, Not, Repository } from 'typeorm';
+import { DeleteResult, FindManyOptions, In, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
 
@@ -18,7 +18,7 @@ export class RoleService {
     private policyService: PolicyService,
   ) {}
 
-  async create(createRoleDto: CreateRoleDto) {
+  async create(createRoleDto: CreateRoleDto): Promise<Role> {
     const isExistingRole = await this.roleRepository.findOne({
       where: {
         name: createRoleDto.name,
@@ -42,8 +42,11 @@ export class RoleService {
     return this.roleRepository.save(role);
   }
 
-  async findAll(query: BaseQueryParameter) {
-    const { limit, offset, order, sort } = query;
+  async findAll(
+    query: BaseQueryParameter,
+  ): Promise<{ data: Role[]; total: number }> {
+    const { limit, offset, order } = query;
+    const sort = query.sort || 'updatedAt';
 
     const [data, total]: [Role[], number] =
       await this.roleRepository.findAndCount({
@@ -69,7 +72,7 @@ export class RoleService {
     };
   }
 
-  findOne(id: string) {
+  findOne(id: string): Promise<Role | null> {
     return this.roleRepository.findOne({
       relations: ['policies'],
       select: {
@@ -86,7 +89,7 @@ export class RoleService {
     });
   }
 
-  async update(id: string, updateRoleDto: UpdateRoleDto) {
+  async update(id: string, updateRoleDto: UpdateRoleDto): Promise<Role> {
     const role = await this.roleRepository.findOne({
       where: {
         id,
@@ -95,7 +98,7 @@ export class RoleService {
 
     if (!role) throw new NotFoundException('Role not found');
 
-    const isExistingRole = this.roleRepository.findOne({
+    const isExistingRole = await this.roleRepository.findOne({
       where: {
         id: Not(id),
         name: updateRoleDto.name,
@@ -105,7 +108,9 @@ export class RoleService {
     if (isExistingRole)
       throw new BadRequestException('Role name already exists');
 
-    if (updateRoleDto?.policyIds?.length > 0) {
+    updateRoleDto.policyIds = updateRoleDto.policyIds || [];
+
+    if (updateRoleDto.policyIds.length > 0) {
       const listPolicy = await this.policyService.findAllOtherService({
         where: {
           id: In(updateRoleDto.policyIds),
@@ -115,16 +120,16 @@ export class RoleService {
       role.policies = listPolicy;
     }
 
-    role.name = updateRoleDto.name;
+    const updatedRole = this.roleRepository.merge(role, updateRoleDto);
 
-    return this.roleRepository.save(role);
+    return this.roleRepository.save(updatedRole);
   }
 
-  findAllOtherService(query: FindManyOptions<Role>) {
+  findAllOtherService(query: FindManyOptions<Role>): Promise<Role[]> {
     return this.roleRepository.find(query);
   }
 
-  remove(id: string) {
+  remove(id: string): Promise<DeleteResult> {
     return this.roleRepository.delete({
       id,
     });
