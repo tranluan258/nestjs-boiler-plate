@@ -20,7 +20,7 @@ async function bootstrap() {
       transform: true,
       skipMissingProperties: false,
       disableErrorMessages: false,
-      exceptionFactory(errors) {
+      exceptionFactory(errors): void {
         const messages = errorFormatter(errors);
         throw new BadRequestException(messages);
       },

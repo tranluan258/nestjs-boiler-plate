@@ -15,7 +15,8 @@ export class AccountService {
     private accountRepository: Repository<Account>,
     private roleService: RoleService,
   ) {}
-  async create(createAccountDto: CreateAccountDto) {
+
+  async create(createAccountDto: CreateAccountDto): Promise<Account> {
     const isExistingAccount = await this.accountRepository.findOne({
       where: {
         username: createAccountDto.username,
