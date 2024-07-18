@@ -5,7 +5,6 @@ export const errorFormatter = (
   errMessage?: string[],
   parentField?: string,
 ): string[] => {
-  console.log('errors', errors);
   const result = errMessage || [];
   let errorField = '';
   let validationList;
