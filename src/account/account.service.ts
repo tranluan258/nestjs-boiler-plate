@@ -15,7 +15,8 @@ export class AccountService {
     private accountRepository: Repository<Account>,
     private roleService: RoleService,
   ) {}
-  async create(createAccountDto: CreateAccountDto) {
+
+  async create(createAccountDto: CreateAccountDto): Promise<Account> {
     const isExistingAccount = await this.accountRepository.findOne({
       where: {
         username: createAccountDto.username,
@@ -125,7 +126,11 @@ export class AccountService {
     });
   }
 
-  findByUsername(username: string) {
+  findByUsername(username: string): Promise<{
+    id: string;
+    username: string;
+    password?: string;
+  }> {
     return this.accountRepository.findOne({
       where: {
         username: username,

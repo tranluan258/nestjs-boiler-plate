@@ -1,4 +1,4 @@
-import { BaseQueryParameter } from './../shared/base-query-parameter';
+import { BaseQueryParameter } from '@/shared/base-query-parameter';
 import { PermissionService } from './../permission/permission.service';
 import {
   BadRequestException,
@@ -9,7 +9,8 @@ import { CreatePolicyDto } from './dto/create-policy.dto';
 import { UpdatePolicyDto } from './dto/update-policy.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Policy } from './entities/policy.entity';
-import { FindManyOptions, In, Not, Repository } from 'typeorm';
+import { DeleteResult, FindManyOptions, In, Not, Repository } from 'typeorm';
+import { BaseResponseForPaging } from '@/shared/response-for-paging';
 
 @Injectable()
 export class PolicyService {
@@ -18,7 +19,7 @@ export class PolicyService {
     private permissionService: PermissionService,
   ) {}
 
-  async create(createPolicyDto: CreatePolicyDto) {
+  async create(createPolicyDto: CreatePolicyDto): Promise<Policy> {
     const isExistingPolicy = await this.policyRepository.findOne({
       where: {
         name: createPolicyDto.name,
@@ -43,7 +44,9 @@ export class PolicyService {
     return this.policyRepository.save(policy);
   }
 
-  async findAll(query: BaseQueryParameter) {
+  async findAll(
+    query: BaseQueryParameter,
+  ): Promise<BaseResponseForPaging<Policy>> {
     const { limit, offset, order, sort } = query;
 
     const [data, total]: [Policy[], number] =
@@ -71,7 +74,7 @@ export class PolicyService {
     };
   }
 
-  findOne(id: string) {
+  findOne(id: string): Promise<Policy> {
     return this.policyRepository.findOne({
       relations: ['permissions'],
       select: {
@@ -89,7 +92,7 @@ export class PolicyService {
     });
   }
 
-  async update(id: string, updatePolicyDto: UpdatePolicyDto) {
+  async update(id: string, updatePolicyDto: UpdatePolicyDto): Promise<Policy> {
     const policy = await this.policyRepository.findOne({
       where: {
         id,
@@ -121,13 +124,15 @@ export class PolicyService {
     return this.policyRepository.save(policy);
   }
 
-  remove(id: string) {
+  remove(id: string): Promise<DeleteResult> {
     return this.policyRepository.delete({
       id,
     });
   }
 
-  async findAllOtherService(query?: FindManyOptions<Policy>) {
+  async findAllOtherService(
+    query?: FindManyOptions<Policy>,
+  ): Promise<Policy[]> {
     return this.policyRepository.find(query);
   }
 }

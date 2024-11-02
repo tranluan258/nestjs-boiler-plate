@@ -5,6 +5,9 @@
 
 # Enviroment
 .env
+.env.local
+.env.development
+.docker.env
 
 # Logs
 logs

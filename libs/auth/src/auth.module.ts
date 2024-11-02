@@ -6,7 +6,7 @@ import { LocalStrategy } from './strategy/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { AuthOptions } from './interface/auth.options';
-import { ACCOUNT_SERVICE } from './constant/constant';
+import { ACCOUNT_SERVICE, JWT_SECRET } from './constant/constant';
 
 @Module({})
 export class AuthModule {
@@ -17,7 +17,7 @@ export class AuthModule {
         PassportModule,
         JwtModule.registerAsync({
           useFactory: () => ({
-            secret: options.jwtSectet,
+            secret: options.jwtSecret,
             signOptions: { expiresIn: '1d' },
           }),
         }),
@@ -25,6 +25,10 @@ export class AuthModule {
       ],
       controllers: [AuthController],
       providers: [
+        {
+          provide: JWT_SECRET,
+          useValue: options.jwtSecret,
+        },
         AuthService,
         LocalStrategy,
         JwtStrategy,

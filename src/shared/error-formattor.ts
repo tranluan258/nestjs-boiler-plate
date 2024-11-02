@@ -2,9 +2,9 @@ import { ValidationError } from '@nestjs/common';
 
 export const errorFormatter = (
   errors: ValidationError[],
-  errMessage?: any,
+  errMessage?: string[],
   parentField?: string,
-): any => {
+): string[] => {
   const result = errMessage || [];
   let errorField = '';
   let validationList;
@@ -12,12 +12,12 @@ export const errorFormatter = (
     errorField = parentField
       ? `${parentField}.${error.property}`
       : error.property;
-    if (!error.constraints && error.children.length) {
-      errorFormatter(error.children, result, errorField);
+    if (!error.constraints && error.children!.length) {
+      errorFormatter(error.children!, result, errorField);
     } else {
-      validationList = Object.values(error.constraints);
+      validationList = Object.values(error.constraints!);
       validationList.length > 0
-        ? result.push(validationList.pop())
+        ? result.push(validationList.pop()!)
         : 'Invalid value';
     }
   });

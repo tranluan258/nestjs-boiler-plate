@@ -13,7 +13,7 @@ import { AuthModule } from '@app/auth';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env.' + process.env.NODE_ENV,
+      envFilePath: '.env.' + process.env.NODE_ENV ?? 'local',
       load: [configuration],
       isGlobal: true,
     }),
@@ -39,14 +39,14 @@ import { AuthModule } from '@app/auth';
       imports: [AccountModule],
       inject: [AccountService],
       useFactory: (accountService: AccountService) => accountService,
-      jwtSectet: process.env.JWT_SECRET,
+      jwtSecret: process.env.JWT_SECRET,
     }),
   ],
   controllers: [],
   providers: [],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+  configure(consumer: MiddlewareConsumer): void {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
