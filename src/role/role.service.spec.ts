@@ -27,6 +27,7 @@ describe('RoleService', () => {
             save: jest.fn(),
             findAndCount: jest.fn(),
             delete: jest.fn(),
+            merge: jest.fn(),
           },
         },
       ],
