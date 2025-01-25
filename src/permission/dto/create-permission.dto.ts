@@ -5,7 +5,6 @@ import { IsEnum, IsNotEmpty } from 'class-validator';
 
 export class CreatePermissionDto {
   @ApiProperty({
-    type: 'enum',
     enum: [
       RESOURCE.ACCOUNT,
       RESOURCE.ROLE,
@@ -20,7 +19,6 @@ export class CreatePermissionDto {
   resource: string;
 
   @ApiProperty({
-    type: 'enum',
     enum: [ACTION.CREATE, ACTION.READ, ACTION.UPDATE, ACTION.DELETE],
   })
   @IsEnum(ACTION, {

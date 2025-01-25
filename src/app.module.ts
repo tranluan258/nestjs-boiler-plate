@@ -13,7 +13,7 @@ import { AuthModule } from '@app/auth';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env.' + process.env.NODE_ENV ?? 'local',
+      envFilePath: '.env.' + process.env.NODE_ENV,
       load: [configuration],
       isGlobal: true,
     }),
