@@ -41,7 +41,9 @@ export class AccountService {
     return this.accountRepository.save(account);
   }
 
-  async findAll(query: BaseQueryParameter) {
+  async findAll(
+    query: BaseQueryParameter,
+  ): Promise<{ data: Account[]; total: number }> {
     const { limit, offset, order, sort } = query;
 
     const [data, total] = await this.accountRepository.findAndCount({
@@ -82,7 +84,7 @@ export class AccountService {
     };
   }
 
-  findOne(id: string) {
+  findOne(id: string): Promise<Account> {
     const account = this.accountRepository.findOne({
       where: {
         id: id,

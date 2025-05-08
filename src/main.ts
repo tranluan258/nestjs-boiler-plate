@@ -4,9 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe, BadRequestException } from '@nestjs/common';
 import { errorFormatter } from './shared/error-formattor';
+import { BunAdapter } from './bun.adapter';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+async function bootstrap(): Promise<void> {
+  const app = await NestFactory.create(AppModule, new BunAdapter(), {
     cors: true,
   });
 
